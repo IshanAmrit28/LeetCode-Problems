@@ -1,23 +1,27 @@
 class Solution {
 public:
     string robotWithString(string s) {
-        map<char, int> freq;
-        for (char c : s) freq[c]++;
-
+        int n = s.size();
         stack<char> t;
         string result;
-        char smallest = freq.begin()->first;
+        
+        // Frequency count of all characters
+        vector<int> freq(26, 0);
+        for (char c : s) freq[c - 'a']++;
+
+        char smallest = 'a';
 
         for (char c : s) {
             t.push(c);
-            freq[c]--;
+            freq[c - 'a']--;
 
-            if (freq[c] == 0) freq.erase(c);
+            // Update smallest remaining char
+            while (smallest <= 'z' && freq[smallest - 'a'] == 0) {
+                smallest++;
+            }
 
-            if (!freq.empty())
-                smallest = freq.begin()->first;
-
-            while (!t.empty() && (freq.empty() || t.top() <= smallest)) {
+            // Pop from stack if it's <= smallest char left in s
+            while (!t.empty() && t.top() <= smallest) {
                 result += t.top();
                 t.pop();
             }
