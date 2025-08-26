@@ -2,35 +2,35 @@ class Solution {
 public:
     vector<int> findOrder(int n, vector<vector<int>>& prerequisites) {
         vector<vector<int>> adj(n);
-        for (auto &p : prerequisites)
-            adj[p[1]].push_back(p[0]);
-
-        vector<int> vis(n, 0), pathvis(n, 0), topo;
-        stack<int> st;
-
-        function<bool(int)> dfs = [&](int u) {
-            vis[u] = 1;
-            pathvis[u] = 1;
-            for (int v : adj[u]) {
-                if (!vis[v]) {
-                    if (dfs(v)) return true;
-                } else if (pathvis[v]) {
-                    return true;
+        vector<int> indegree(n, 0);
+        
+        for (auto& pre : prerequisites) {
+            int u = pre[1];
+            int v = pre[0]; 
+            adj[u].push_back(v);
+            indegree[v]++;
+        }
+        
+        queue<int> q;
+        for (int i = 0; i < n; i++) {
+            if (indegree[i] == 0) q.push(i);
+        }
+        
+        vector<int> order;
+        while (!q.empty()) {
+            int node = q.front();
+            q.pop();
+            order.push_back(node);
+            
+            for (auto nei : adj[node]) {
+                indegree[nei]--;
+                if (indegree[nei] == 0) {
+                    q.push(nei);
                 }
             }
-            pathvis[u] = 0;
-            st.push(u);
-            return false;
-        };
-
-        for (int i = 0; i < n; i++) {
-            if (!vis[i] && dfs(i)) return {};
         }
-
-        while (!st.empty()) {
-            topo.push_back(st.top());
-            st.pop();
-        }
-        return topo;
+        
+        if ((int)order.size() == n) return order; 
+        return {};
     }
 };
