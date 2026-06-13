@@ -3,14 +3,13 @@ public:
     typedef pair<int,int>p;
     vector<int> topKFrequent(vector<int>& nums, int k) {
         unordered_map<int,int>mp;
-        
-        priority_queue<p,vector<p>,greater<p>>pq;
-        for(auto i:nums){
+        for(auto &i:nums){
             mp[i]++;
         }
-        for(auto i:mp){
-            int val=i.first;
+        priority_queue<p,vector<p>,greater<p>>pq;
+        for(auto &i:mp){
             int freq=i.second;
+            int val=i.first;
             pq.push({freq,val});
             if(pq.size()>k){
                 pq.pop();
@@ -22,6 +21,5 @@ public:
             pq.pop();
         }
         return ans;
-
     }
 };
