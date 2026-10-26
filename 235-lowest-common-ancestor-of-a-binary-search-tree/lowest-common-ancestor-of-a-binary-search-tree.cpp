@@ -14,6 +14,7 @@ public:
         if(!root){
             return NULL;
         }
+        
         int curr=root->val;
         if(curr<p->val && curr<q->val){
             return lowestCommonAncestor(root->right,p,q);
@@ -23,5 +24,4 @@ public:
         }
         return root;
     }
-
 };
